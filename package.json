@@ -1,6 +1,6 @@
 {
   "name": "tuya-logic",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "private": true,
   "type": "module",
   "description": "Tuya ladder logic editor, server runtime, and Android client",
