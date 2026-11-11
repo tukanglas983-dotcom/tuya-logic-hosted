@@ -1,6 +1,6 @@
 # Tuya Logic hosted deployment
 
-Hosted 1.7.1 adds automatic parallel wire joins, dependable wire deletion, endpoint dragging, and rectangle selection for deleting groups of Ladder elements, retaining the existing hosted authentication, Supabase persistence, and single-engine lease. The source archive contains no credentials, device inventory, saved programs, native clients, or private test evidence. Previously published archives remain immutable.
+Hosted 1.8.0 adds daily time-zone-aware schedules, actual selected input values on Ladder contacts, and an automatically opened actual-device parameter monitor during execution. LIVE, SIM and VIRTUAL values are distinguished, including separate actual readback for forced inputs. It retains automatic parallel wire joins, wire editing, rectangle selection, hosted authentication, Supabase persistence, and the single-engine lease. The source archive contains no credentials, device inventory, saved programs, native clients, or private test evidence. Previously published archives remain immutable.
 
 Ladder v1 programs remain supported. The editor migrates their series and parallel paths to explicit v2 nodes and wires. Save validates connectivity and compiles the graph on the server. Function Block Diagram uses the same execution engine and device capability metadata. The update also coalesces live state events and preserves the ordering guards introduced in 1.6.2.
 
@@ -80,12 +80,12 @@ The observed Free configuration provides 512 MB RAM and 0.1 vCPU, with Disk unav
 
 Use **Public Git Repository** with the authorized repository URL; no broad Git-account integration is needed. Choose branch `main`, leave **Root Directory** blank, select **Node.js 22**, and keep one Free instance. Abasthan supports a public repository URL and explicit build/start commands. [Deployment configuration](https://abasthan.com/docs/deployment-flow).
 
-The repository must contain `Tuya-Logic-Hosted-v1.7.1.tar.gz` and the matching `package.json`, `package-lock.json` and `DEPLOYMENT.md`. The application sources, SQL and Dockerfile are inside the reviewed archive. Preserve the old 1.6.0 and 1.6.1 artifacts when publishing the new version; point this build at the exact new filename.
+The repository must contain `Tuya-Logic-Hosted-v1.8.0.tar.gz` and the matching `package.json`, `package-lock.json` and `DEPLOYMENT.md`. The application sources, SQL and Dockerfile are inside the reviewed archive. Preserve the old 1.6.0 and 1.6.1 artifacts when publishing the new version; point this build at the exact new filename.
 
 Set **Build Command** to:
 
 ```sh
-tar -xzf Tuya-Logic-Hosted-v1.7.1.tar.gz --strip-components=1 && npm ci --omit=dev --omit=optional --ignore-scripts
+tar -xzf Tuya-Logic-Hosted-v1.8.0.tar.gz --strip-components=1 && npm ci --omit=dev --omit=optional --ignore-scripts
 ```
 
 Set **Start Command** to:
@@ -107,7 +107,7 @@ Run from this directory with Node.js 22+:
 ```text
 node scripts/package-hosting.mjs --check
 node scripts/package-hosting.mjs --archive
-node scripts/package-hosting.mjs --verify artifacts/Tuya-Logic-Hosted-v1.7.1.tar.gz
+node scripts/package-hosting.mjs --verify artifacts/Tuya-Logic-Hosted-v1.8.0.tar.gz
 ```
 
 The archive uses an explicit file allowlist, rejects symlinks, verifies every file's SHA-256 and byte length against an included manifest, and includes no tests or user-data paths. `--verify` also checks the archive against the current reviewed sources. It refuses to overwrite an earlier archive. Extract it into a new directory; the build context is the extracted `tuya-logic` directory. The companion `.sha256` file records the archive hash. Verification does not substitute for actually building and running the Linux container.
