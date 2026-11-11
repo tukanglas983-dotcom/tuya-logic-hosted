@@ -1,6 +1,8 @@
 # Tuya Logic hosted deployment
 
-Hosted 1.6.1 is based on the stable 1.6.0 application, with hosted authentication, optional Supabase persistence and a database lease for a single active engine. It does not contain the Windows runtime, Android APK, credentials, saved programs, local backups, or test evidence. The surrounding workspace is not a deployment context. The previously published 1.6.0 archive is immutable; publish 1.6.1 as a new artifact.
+Hosted 1.6.2 is based on the stable 1.6.0 application, with hosted authentication, optional Supabase persistence and a database lease for a single active engine. It does not contain the Windows runtime, Android APK, credentials, saved programs, local backups, or test evidence. The surrounding workspace is not a deployment context. The previously published 1.6.0 and 1.6.1 archives are immutable; publish 1.6.2 as a new artifact.
+
+Version 1.6.2 fixes stale state updates arriving after a successful Save. The editor preserves the newer saved revision when an older response or event arrives. This update requires no Supabase schema migration and no native Windows or Android client rebuild. After deployment, reload the client and sign in again if the server restarted; execution remains stopped.
 
 ## Runtime contract
 
@@ -76,12 +78,12 @@ The observed Free configuration provides 512 MB RAM and 0.1 vCPU, with Disk unav
 
 Use **Public Git Repository** with the authorized repository URL; no broad Git-account integration is needed. Choose branch `main`, leave **Root Directory** blank, select **Node.js 22**, and keep one Free instance. Abasthan supports a public repository URL and explicit build/start commands. [Deployment configuration](https://abasthan.com/docs/deployment-flow).
 
-The repository must contain `Tuya-Logic-Hosted-v1.6.1.tar.gz` and the matching `package.json`, `package-lock.json` and `DEPLOYMENT.md`. The application sources, SQL and Dockerfile are inside the reviewed archive. Preserve the old 1.6.0 artifact when publishing the new version; point this build at the exact new filename.
+The repository must contain `Tuya-Logic-Hosted-v1.6.2.tar.gz` and the matching `package.json`, `package-lock.json` and `DEPLOYMENT.md`. The application sources, SQL and Dockerfile are inside the reviewed archive. Preserve the old 1.6.0 and 1.6.1 artifacts when publishing the new version; point this build at the exact new filename.
 
 Set **Build Command** to:
 
 ```sh
-tar -xzf Tuya-Logic-Hosted-v1.6.1.tar.gz --strip-components=1 && npm ci --omit=dev --omit=optional --ignore-scripts
+tar -xzf Tuya-Logic-Hosted-v1.6.2.tar.gz --strip-components=1 && npm ci --omit=dev --omit=optional --ignore-scripts
 ```
 
 Set **Start Command** to:
@@ -103,14 +105,14 @@ Run from this directory with Node.js 22+:
 ```text
 node scripts/package-hosting.mjs --check
 node scripts/package-hosting.mjs --archive
-node scripts/package-hosting.mjs --verify artifacts/Tuya-Logic-Hosted-v1.6.1.tar.gz
+node scripts/package-hosting.mjs --verify artifacts/Tuya-Logic-Hosted-v1.6.2.tar.gz
 ```
 
 The archive uses an explicit file allowlist, rejects symlinks, verifies every file's SHA-256 and byte length against an included manifest, and includes no tests or user-data paths. `--verify` also checks the archive against the current reviewed sources. It refuses to overwrite an earlier archive. Extract it into a new directory; the build context is the extracted `tuya-logic` directory. The companion `.sha256` file records the archive hash. Verification does not substitute for actually building and running the Linux container.
 
 `package-lock.json` pins `ws` and its registry integrity. The supplied `generate-lock.mjs` checks the exact dependency metadata and downloaded archive hash without executing package scripts. Run it only when intentionally updating the lock. If the dependency graph grows, use `npm install --package-lock-only --ignore-scripts` and review the resulting lock instead. The image installs with `npm ci --omit=dev --omit=optional --ignore-scripts`.
 
-Where Docker is already available, build with `docker build -t tuya-logic:1.6.1-hosted .`. Provide runtime secrets through the deployment system and configure either the persistent volume or Supabase before running. The Docker image uses a maintained major-version tag so rebuilds receive Node/security updates; record and deploy the resulting immutable image digest after validating it. No Docker installation or runtime build was performed on the current Windows machine because Docker is absent.
+Where Docker is already available, build with `docker build -t tuya-logic:1.6.2-hosted .`. Provide runtime secrets through the deployment system and configure either the persistent volume or Supabase before running. The Docker image uses a maintained major-version tag so rebuilds receive Node/security updates; record and deploy the resulting immutable image digest after validating it. No Docker installation or runtime build was performed on the current Windows machine because Docker is absent.
 
 ## Northflank: not eligible for this no-card deployment
 
