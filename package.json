@@ -1,0 +1,17 @@
+{
+  "name": "tuya-logic",
+  "version": "1.6.0",
+  "private": true,
+  "type": "module",
+  "description": "Tuya ladder logic editor, server runtime, and Android client",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "ws": "8.22.2"
+  }
+}
